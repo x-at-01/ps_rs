@@ -1,0 +1,32 @@
+[workspace]
+resolver = "3"
+members = []
+
+[workspace.package]
+license = "MulanPSL-2.0"
+repository = "https://github.com/webc-site/wedb.git"
+edition = "2024"
+
+[workspace.dependencies]
+
+[workspace.lints]
+
+[profile.release]
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+# panic 维持默认 unwind（panic-abort-policy 裁决）：撤 abort 换单会话 panic
+# 隔离（C# TryConsumeMessages catch(Exception)→Dispose 对位），连接泵
+# catch_unwind 兜底收场（wnode net/handler/drive.rs process_stream），
+# vector cleanup 与 wbftree 回调边界的既有 catch_unwind 随之恢复生效
+strip = true
+overflow-checks = false
+
+[profile.dev]
+debug = 1
+split-debuginfo = "unpacked"
+
+[profile.bench]
+opt-level = 3
+lto = "fat"
+codegen-units = 1
